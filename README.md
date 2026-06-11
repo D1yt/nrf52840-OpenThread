@@ -56,6 +56,38 @@ If you prefer using the command-line tool, **nrfjprog** (part of the [nRF Comman
 
 **Note**: The `--sectorerase` flag ensures only the necessary sectors are erased, preserving the bootloader on the USB dongle.
 
+#### Using nrfutil
+
+If you prefer using the command-line tool, **nrfutil** (part of the [nRF Command Line Tools](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF-Command-Line-Tools)) can also flash the USB firmware. **nrfutil** replaces the archived **nrfjprog** CLI.
+
+1. Put the nRF52840 dongle into **program mode**:
+   - Insert the dongle into a USB port.
+   - Hold down the reset button while inserting it, until the LED starts blinking rapidly.
+
+2. Install **required packages** for nrfutil:
+   - Use the following command:
+     ```bash
+     nrfutil install device nrf5sdk-tools
+     ```
+
+3. Prepare a flashable package:
+   - Use the following commands:
+     ```bash
+     nrfutil pkg generate --hw-version 52 --sd-req=0x00 --application ot-rcp-USB.hex --application-version 1 ot-rcp.zip
+     ```
+
+4. Identify the COM port (or "/dev/ttyACM0" on Linux) for the dongle:
+   - You can use the device manager for this.
+
+5. Flash the packaged USB firmware:
+   - Use the following command (make sure to replace with the correct COM-port):
+     ```bash
+     nrfjprog dfu usb-serial -pkg ot-rcp.zip -p COM???
+     ```
+
+6. Verify the flashing process:
+   - After flashing, the device should start running the new firmware.
+
 ### UART Version
 
 Once you have downloaded the firmware, you can flash it onto your nRF52840 device using `nrfjprog` (part of the [nRF Command Line Tools](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF-Command-Line-Tools)):
